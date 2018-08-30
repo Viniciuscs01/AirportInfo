@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -9,9 +7,29 @@ namespace AirportInfo
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        public MainPage() => InitializeComponent();
+
+        private async void Process_Clicked(object sender, EventArgs e)
         {
-            InitializeComponent();
+            ToggleProcessing();
+
+            await Wait();
+
+            AirportInfo.Text = "Hue";
+
+            ToggleProcessing();
         }
+
+        private void ToggleProcessing()
+        {
+            var start = IATACode.IsEnabled;
+
+            ProcessIndicator.IsVisible = start;
+            ProcessIndicator.IsRunning = start;
+            Process.IsEnabled = !start;
+            IATACode.IsEnabled = !start;
+        }
+
+        private async Task Wait() => await Task.Run(action: () => { Thread.Sleep(5000); });
     }
 }

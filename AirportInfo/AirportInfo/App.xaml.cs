@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -9,6 +8,11 @@ namespace AirportInfo
     {
         public App()
         {
+#if DEBUG
+            LiveReload.Init();
+#endif
+
+
             InitializeComponent();
 
             MainPage = new MainPage();
