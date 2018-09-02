@@ -2,7 +2,7 @@
 {
     public interface IValidationRule<T>
     {
-        string ValidationMessaget { get; set; }
+        string ValidationMessage { get; set; }
 
         bool Check(T value);
     }

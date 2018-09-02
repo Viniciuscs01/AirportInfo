@@ -2,6 +2,7 @@
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+
 namespace AirportInfo
 {
     public partial class App : Application
@@ -11,7 +12,6 @@ namespace AirportInfo
 #if DEBUG
             LiveReload.Init();
 #endif
-
 
             InitializeComponent();
 

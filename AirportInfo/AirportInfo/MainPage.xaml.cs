@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AirportInfo.Models;
 using Xamarin.Forms;
 
 namespace AirportInfo
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage() => InitializeComponent();
+        public MainPage()
+        {
+            InitializeComponent();
+            BindingContext = new MainPageViewModel();
+        }
 
         private async void Process_Clicked(object sender, EventArgs e)
         {

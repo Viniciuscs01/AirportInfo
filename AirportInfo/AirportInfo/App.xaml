@@ -1,8 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:page="clr-namespace:AirportInfo"
              x:Class="AirportInfo.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <OnPlatform
+                x:Key="LittleSize"
+                x:TypeArguments="x:Double"
+                iOS="11"
+                Android="12"
+                WinPhone="12" />
 
+            <Color x:Key="ErrorColor">#ff0000</Color>
+            <Style x:Key="ValidationErrorLabelStyle"
+				   TargetType="{x:Type Label}">
+                <Setter Property="TextColor"
+						   Value="{StaticResource ErrorColor}" />
+                <Setter Property="FontSize"
+					       Value="{StaticResource LittleSize}" />
+                <Setter Property="Margin"
+                        Value="0,-10,0,0" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

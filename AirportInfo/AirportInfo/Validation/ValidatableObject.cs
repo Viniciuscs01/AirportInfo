@@ -1,28 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
+using System.Linq;
 using AirportInfo.Validation.Abstractions;
+using AirportInfo.Validation.Core;
 
 namespace AirportInfo.Validation
 {
-    public class ValidatableObject<T> : sa, IValidity
+    public class ValidatableObject<T> : ExtendedBindableObject, IValidity
     {
-        private readonly List<IValidationRule<T>> _validations;
-        private readonly ObservableCollection<string> _errors;
-        private T _value;
         private bool _isValid;
+        private T _value;
+        public ObservableCollection<string> Errors { get; }
 
-        public List<IValidationRule<T>> Validations => _validations;
+        public bool IsValid
+        {
+            get => _isValid;
 
-        public ObservableCollection<string> Errors => _errors;
+            set
+            {
+                _isValid = value;
+                RaisePropertyChanged(() => IsValid);
+            }
+        }
+
+        public List<IValidationRule<T>> Validations { get; }
 
         public T Value
         {
-            get
-            {
-                return _value;
-            }
+            get => _value;
 
             set
             {
@@ -31,34 +37,20 @@ namespace AirportInfo.Validation
             }
         }
 
-        public bool IsValid
+        public ValidatableObject(bool initialStateValid = true)
         {
-            get
-            {
-                return _isValid;
-            }
-
-            set
-            {
-                _isValid = value;
-                _errors.Clear();
-                RaisePropertyChanged(() => IsValid);
-            }
-        }
-
-        public ValidatableObject()
-        {
-            _isValid = true;
-            _errors = new ObservableCollection<string>();
-            _validations = new List<IValidationRule<T>>();
+            _isValid = initialStateValid;
+            Errors = new ObservableCollection<string>();
+            Errors.CollectionChanged += Errors_CollectionChanged;
+            Validations = new List<IValidationRule<T>>();
         }
 
         public bool Validate()
         {
             Errors.Clear();
 
-            IEnumerable<string> errors = _validations.Where(v => !v.Check(Value))
-                                                     .Select(v => v.ValidationMessage);
+            var errors = Validations.Where(v => !v.Check(Value))
+                                     .Select(v => v.ValidationMessage);
 
             foreach (var error in errors)
             {
@@ -67,7 +59,10 @@ namespace AirportInfo.Validation
 
             IsValid = !Errors.Any();
 
-            return this.IsValid;
+            return IsValid;
         }
+
+        private void Errors_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+                    => RaisePropertyChanged(() => Errors);
     }
 }

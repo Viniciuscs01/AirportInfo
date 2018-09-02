@@ -1,15 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:AirportInfo.Behaviors"
              xmlns:cvt="clr-namespace:AirportInfo.Converter"
+             xmlns:vm="clr-namespace:AirportInfo.Models"
              x:Class="AirportInfo.MainPage"
              Padding="50">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <cvt:InverseBoolConverter x:Key="InverseBool" />
+            <cvt:ValidationErrorConverter x:Key="ValidationError" />
+            <cvt:ToUpperConverter x:Key="ToUpper" />
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel x:Name="viewModel" />
+    </ContentPage.BindingContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,17 +25,31 @@
         </Grid.RowDefinitions>
         <StackLayout Grid.Row="0">
             <Label Text="Inform an Airport IATA:" />
-            <Entry Placeholder="AMS, GRU, NYC, etc..." x:Name="IATACode" />
-            <Button Text="Get Airport Information" x:Name="Process" Clicked="Process_Clicked" />
+            <Entry Placeholder="AMS, GRU, NYC, etc..."
+                   x:Name="IATACode"
+                   Text="{Binding IATACode.Value, Mode=TwoWay,Converter={StaticResource ToUpper}}">
+                <Entry.Behaviors>
+                    <behaviors:ValidateOnLostFocusBehavior ValidateCommand="{Binding OnLostFocus}" />
+                    <behaviors:MaxLengthTextBehavior MaxLength="3" />
+                </Entry.Behaviors>
+            </Entry>
+            <Label Text="{Binding IATACode.Errors, Converter={StaticResource ValidationError}}"
+				   Style="{StaticResource ValidationErrorLabelStyle}" />
+            <Button Text="Get Airport Information"
+              x:Name="Process"
+              Clicked="Process_Clicked"
+              IsEnabled="{Binding IATACode.IsValid}" />
         </StackLayout>
         <Label x:Name="AirportInfo"
-               IsVisible="{Binding Source={x:Reference ProcessIndicator}, Path=IsVisible, Converter={StaticResource InverseBool}}"
-               Grid.Row="1"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
+           IsVisible="{Binding Source={x:Reference ProcessIndicator},
+                               Path=IsVisible,
+                               Converter={StaticResource InverseBool}}"
+           Grid.Row="1"
+           VerticalOptions="Center"
+           HorizontalOptions="Center" />
         <ActivityIndicator x:Name="ProcessIndicator"
-                               Grid.Row="1"
-                               IsVisible="True"
-                               VerticalOptions="CenterAndExpand" />
+                           Grid.Row="1"
+                           IsVisible="True"
+                           VerticalOptions="CenterAndExpand" />
     </Grid>
 </ContentPage>
