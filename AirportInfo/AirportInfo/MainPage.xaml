@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="clr-namespace:AirportInfo.Behaviors"
              xmlns:cvt="clr-namespace:AirportInfo.Converter"
-             xmlns:vm="clr-namespace:AirportInfo.Models"
+             xmlns:vm="clr-namespace:AirportInfo.ViewModels"
              x:Class="AirportInfo.MainPage"
              Padding="50">
 
@@ -35,17 +35,19 @@
             <Label Text="{Binding IATACode.Errors, Converter={StaticResource ValidationError}}"
 				   Style="{StaticResource ValidationErrorLabelStyle}" />
             <Button Text="Get Airport Information"
-              x:Name="Process"
-              Clicked="Process_Clicked"
-              IsEnabled="{Binding IATACode.IsValid}" />
+                    x:Name="Process"
+                    IsEnabled="{Binding IATACode.IsValid}"
+                    Command="{Binding GetInfo}" />
         </StackLayout>
         <Label x:Name="AirportInfo"
-           IsVisible="{Binding Source={x:Reference ProcessIndicator},
+               Text="{Binding Airport}"
+               IsVisible="{Binding Source={x:Reference ProcessIndicator},
                                Path=IsVisible,
                                Converter={StaticResource InverseBool}}"
-           Grid.Row="1"
-           VerticalOptions="Center"
-           HorizontalOptions="Center" />
+
+               Grid.Row="1"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
         <ActivityIndicator x:Name="ProcessIndicator"
                            Grid.Row="1"
                            IsVisible="True"

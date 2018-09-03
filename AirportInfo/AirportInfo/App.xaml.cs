@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using AirportInfo.Abstractions;
+using AirportInfo.Services;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,8 +17,12 @@ namespace AirportInfo
 
             InitializeComponent();
 
+            RegisterDependencies();
+
             MainPage = new MainPage();
         }
+
+        private void RegisterDependencies() => DependencyService.Register<IAirportInfoService, AirportInfoService>();
 
         protected override void OnStart()
         {

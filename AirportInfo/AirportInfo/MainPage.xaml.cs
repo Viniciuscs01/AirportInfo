@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AirportInfo.ViewModels;
 using Xamarin.Forms;
 
 namespace AirportInfo
@@ -13,27 +14,23 @@ namespace AirportInfo
             IATACode.Keyboard = Keyboard.Create(KeyboardFlags.CapitalizeCharacter);
         }
 
-        private async void Process_Clicked(object sender, EventArgs e)
-        {
-            ToggleProcessing();
+        //private void Process_Clicked(object sender, EventArgs e)
+        //{
+        //    //ToggleProcessing();
 
-            await Wait();
+        //    ((MainPageViewModel)BindingContext).GetInfo.Execute(null);
 
-            AirportInfo.Text = "Hue";
+        //    //ToggleProcessing();
+        //}
 
-            ToggleProcessing();
-        }
+        //    private void ToggleProcessing()
+        //    {
+        //        var start = IATACode.IsEnabled;
 
-        private void ToggleProcessing()
-        {
-            var start = IATACode.IsEnabled;
-
-            ProcessIndicator.IsVisible = start;
-            ProcessIndicator.IsRunning = start;
-            Process.IsEnabled = !start;
-            IATACode.IsEnabled = !start;
-        }
-
-        private async Task Wait() => await Task.Run(action: () => { Thread.Sleep(5000); });
+        //        ProcessIndicator.IsVisible = start;
+        //        ProcessIndicator.IsRunning = start;
+        //        Process.IsEnabled = !start;
+        //        IATACode.IsEnabled = !start;
+        //    }
     }
 }
