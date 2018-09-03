@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AirportInfo.Models;
 using Xamarin.Forms;
 
 namespace AirportInfo
@@ -11,7 +10,7 @@ namespace AirportInfo
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainPageViewModel();
+            IATACode.Keyboard = Keyboard.Create(KeyboardFlags.CapitalizeCharacter);
         }
 
         private async void Process_Clicked(object sender, EventArgs e)
